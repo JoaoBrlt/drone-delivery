@@ -1,0 +1,379 @@
+version: "3.9"
+
+services:
+  #
+  # KAFKA
+  #
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_PORT}
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "${ZOOKEEPER_PORT}:${ZOOKEEPER_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost ${ZOOKEEPER_PORT} || exit -1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: none
+    restart: unless-stopped
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_PORT}
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:${INTERNAL_KAFKA_PORT},EXTERNAL://localhost:${EXTERNAL_KAFKA_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "${EXTERNAL_KAFKA_PORT}:${EXTERNAL_KAFKA_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost ${EXTERNAL_KAFKA_PORT} || exit -1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    restart: unless-stopped
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:${ZOOKEEPER_PORT}
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:${INTERNAL_KAFKA_PORT}
+      LOGGING_LEVEL_ROOT: "off"
+      LOGGING_LEVEL_COM_PROVECTUS: "off"
+    ports:
+      - "${KAFKA_UI_PORT}:${KAFKA_UI_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  #
+  # DATABASE
+  #
+
+  database:
+    image: postgres:alpine
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${DATABASE_NAME} -U ${DATABASE_USERNAME} -p ${DATABASE_PORT}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: "-p ${DATABASE_PORT}"
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    restart: unless-stopped
+
+  #
+  # SERVICES
+  #
+
+  delivery-pathfinder:
+    build: services/delivery-pathfinder
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+    deploy:
+      replicas: 2
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  drone-heartbeat:
+    build: services/drone-heartbeat
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${DRONE_HEARTBEAT_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+      DATABASE_URL: postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    deploy:
+      replicas: 2
+    ports:
+      - "${DRONE_HEARTBEAT_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  delivery-scheduler:
+    build: services/delivery-scheduler
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${DELIVERY_SCHEDULER_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+      DATABASE_URL: postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${DELIVERY_SCHEDULER_PORT}:${DELIVERY_SCHEDULER_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  drone-registry:
+    build: services/drone-registry
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${DRONE_REGISTRY_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+      DATABASE_URL: postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+      DRONE_CONTROLLER_HOST: drone-controller
+      DRONE_CONTROLLER_PORT: ${DRONE_CONTROLLER_PORT}
+    ports:
+      - "${DRONE_REGISTRY_PORT}:${DRONE_REGISTRY_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+      drone-controller:
+        condition: service_started
+    restart: unless-stopped
+
+  tracking-router:
+    build: services/tracking-router
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${TRACKING_ROUTER_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+      DATABASE_URL: postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${TRACKING_ROUTER_PORT}:${TRACKING_ROUTER_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  drone-controller:
+    build: services/drone-controller
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${DRONE_CONTROLLER_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+    ports:
+      - "${DRONE_CONTROLLER_PORT}:${DRONE_CONTROLLER_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  alert-handler:
+    build: services/alert-handler
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${ALERT_HANDLER_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+    ports:
+      - "${ALERT_HANDLER_PORT}:${ALERT_HANDLER_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  tracking-analyser:
+    build: services/tracking-analyser
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${TRACKING_ANALYSER_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+      NETWORK_COVERAGE_API_HOST: network-coverage-api
+      NETWORK_COVERAGE_API_PORT: ${NETWORK_COVERAGE_API_PORT}
+      GHOST_PING_GENERATOR_HOST: ghost-ping-generator
+      GHOST_PING_GENERATOR_PORT: ${GHOST_PING_GENERATOR_PORT}
+    ports:
+      - "${TRACKING_ANALYSER_PORT}:${TRACKING_ANALYSER_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      ghost-ping-generator:
+        condition: service_started
+      network-coverage-api:
+        condition: service_started
+    restart: unless-stopped
+
+  weather-analyser:
+    build: services/weather-analyser
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${WEATHER_ANALYSER_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+      DATABASE_URL: postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${WEATHER_ANALYSER_PORT}:${WEATHER_ANALYSER_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  authority-communication:
+    build: services/authority-communication
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${AUTHORITY_COMMUNICATION_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+    ports:
+      - "${AUTHORITY_COMMUNICATION_PORT}:${AUTHORITY_COMMUNICATION_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  ghost-ping-generator:
+    build: services/ghost-ping-generator
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${GHOST_PING_GENERATOR_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+      DATABASE_URL: postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+      DRONE_REGISTRY_HOST: drone-registry
+      DRONE_REGISTRY_PORT: ${DRONE_REGISTRY_PORT}
+      TRACKING_ROUTER_HOST: tracking-router
+      TRACKING_ROUTER_PORT: ${TRACKING_ROUTER_PORT}
+    ports:
+      - "${GHOST_PING_GENERATOR_PORT}:${GHOST_PING_GENERATOR_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  alert-router:
+    build: services/alert-router
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${ALERT_ROUTER_PORT}
+      KAFKA_URL: kafka:${INTERNAL_KAFKA_PORT}
+    ports:
+      - "${ALERT_ROUTER_PORT}:${ALERT_ROUTER_PORT}"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  #
+  # LOAD BALANCER
+  #
+
+  load-balancer:
+    image: nginx:alpine
+    environment:
+      PORT: ${LOAD_BALANCER_PORT}
+      DRONE_HEARTBEAT_HOST: drone-heartbeat
+      DRONE_HEARTBEAT_PORT: ${DRONE_HEARTBEAT_PORT}
+    volumes:
+      - ./docker/load-balancer.conf.template:/etc/nginx/templates/default.conf.template
+    ports:
+      - "${LOAD_BALANCER_PORT}:${LOAD_BALANCER_PORT}"
+    depends_on:
+      drone-heartbeat:
+        condition: service_started
+    restart: unless-stopped
+
+  #
+  # EXTERNAL
+  #
+
+  network-coverage-api:
+    build: external/network-coverage-api
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${NETWORK_COVERAGE_API_PORT}
+    ports:
+      - "${NETWORK_COVERAGE_API_PORT}:${NETWORK_COVERAGE_API_PORT}"
+    restart: unless-stopped
+
+  air-traffic-authority:
+    build: external/air-traffic-authority
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${AIR_TRAFFIC_AUTHORITY_PORT}
+    ports:
+      - "${AIR_TRAFFIC_AUTHORITY_PORT}:${AIR_TRAFFIC_AUTHORITY_PORT}"
+    restart: unless-stopped
+
+  local-air-traffic-authority-1:
+    build: external/local-air-traffic-authority
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${LOCAL_AIR_TRAFFIC_AUTHORITY_1_PORT}
+      NAME: ${LOCAL_AIR_TRAFFIC_AUTHORITY_1_NAME}
+    ports:
+      - "${LOCAL_AIR_TRAFFIC_AUTHORITY_1_PORT}:${LOCAL_AIR_TRAFFIC_AUTHORITY_1_PORT}"
+    restart: unless-stopped
+
+  local-air-traffic-authority-2:
+    build: external/local-air-traffic-authority
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      PORT: ${LOCAL_AIR_TRAFFIC_AUTHORITY_2_PORT}
+      NAME: ${LOCAL_AIR_TRAFFIC_AUTHORITY_2_NAME}
+    ports:
+      - "${LOCAL_AIR_TRAFFIC_AUTHORITY_2_PORT}:${LOCAL_AIR_TRAFFIC_AUTHORITY_2_PORT}"
+    restart: unless-stopped
+
+  #
+  # CLIENT
+  #
+
+  client:
+    build: client
+    environment:
+      TZ: ${APPLICATION_TIMEZONE}
+      NODE_ENV: ${APPLICATION_ENVIRONMENT}
+      TRACKING_ROUTER_HOST: localhost
+      TRACKING_ROUTER_PORT: ${TRACKING_ROUTER_PORT}
+      ALERT_ROUTER_HOST: localhost
+      ALERT_ROUTER_PORT: ${ALERT_ROUTER_PORT}
+      AIR_TRAFFIC_AUTHORITY_HOST: localhost
+      AIR_TRAFFIC_AUTHORITY_PORT: ${AIR_TRAFFIC_AUTHORITY_PORT}
+      NETWORK_COVERAGE_API_HOST: localhost
+      NETWORK_COVERAGE_API_PORT: ${NETWORK_COVERAGE_API_PORT}
+    ports:
+      - "${CLIENT_PORT}:80"
+    depends_on:
+      alert-handler:
+        condition: service_started
+      tracking-router:
+        condition: service_started
+    restart: unless-stopped
