@@ -1,0 +1,16 @@
+# Dependencies.
+node_modules/
+
+# Versionning.
+.gitignore
+
+# Docker.
+Dockerfile
+.dockerignore
+
+# Lint.
+.eslintrc.js
+.prettierrc
+
+# Documentation.
+README.md

@@ -1,0 +1,16 @@
+entity: Weather
+items:
+  weather-1:
+    status: "RAIN"
+    latitude: 2.729
+    longitude: 30.5
+    radius: 4
+    dateStart: '2022-01-21T18:00:00Z'
+    dateEnd: '2022-01-22T18:00:00Z'
+  weather-2:
+    status: "TORNADO"
+    latitude: 6
+    longitude: 8
+    radius: 42.75
+    dateStart: '2022-01-19T10:00:00Z'
+    dateEnd: '2022-01-20T16:00:00Z'

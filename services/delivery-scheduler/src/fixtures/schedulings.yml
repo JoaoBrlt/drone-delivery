@@ -1,0 +1,42 @@
+entity: Scheduling
+items:
+  scheduling-1:
+    droneId: 1
+    deliveryId: 'DE-X9NCQ'
+    date: '2021-10-01T08:00:00Z'
+    destination: "5 rue de l'Hôtel-de-Ville, Nice"
+  scheduling-2:
+    droneId: 1
+    deliveryId: 'DE-7KC7J'
+    date: '2021-10-01T10:00:00Z'
+    destination: '46 Square de la Couronne, Paris'
+  scheduling-3:
+    droneId: 3
+    deliveryId: 'DE-CYJHA'
+    date: '2021-10-02T08:00:00Z'
+    destination: '59 Faubourg Saint Honoré, Paris'
+  scheduling-4:
+    droneId: 2
+    deliveryId: 'DE-76XIK'
+    date: '2021-10-01T09:00:00Z'
+    destination: '62 rue La Boétie, Paris'
+  scheduling-5:
+    droneId: 2
+    deliveryId: 'DE-C2VB7'
+    date: '2021-10-02T12:00:00Z'
+    destination: '3 rue de Belgique, Nice'
+  scheduling-6:
+    droneId: 3
+    deliveryId: 'DE-T79DZ'
+    date: '2021-10-02T02:00:00Z'
+    destination: '82 Place de la Madeleine, Paris'
+  scheduling-7:
+    droneId: 4
+    deliveryId: 'DE-MM28J'
+    date: '2021-11-05T22:00:00Z'
+    destination: '83 rue des Chaligny, Nice'
+  scheduling-8:
+    droneId: 4
+    deliveryId: 'DE-ACAAS'
+    date: '2021-12-25T06:00:00Z'
+    destination: '33 rue Nationale, Paris'
