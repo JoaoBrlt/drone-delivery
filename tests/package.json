@@ -1,0 +1,54 @@
+{
+  "name": "tests",
+  "version": "0.0.1",
+  "description": "Tests",
+  "contributors": [
+    {
+      "name" : "João Brilhante",
+      "url" : "https://github.com/JoaoBrlt"
+    },
+    {
+      "name" : "Enzo Briziarelli",
+      "url" : "https://github.com/enbriziare"
+    },
+    {
+      "name" : "Charly Ducrocq",
+      "url" : "https://github.com/CharlyDucrocq"
+    },
+    {
+      "name" : "Quentin Larose",
+      "url" : "https://github.com/QuentinLarose"
+    },
+    {
+      "name" : "Ludovic Marti",
+      "url" : "https://github.com/LudovicMarti"
+    }
+  ],
+  "private": true,
+  "license": "GPLV3",
+  "scripts": {
+    "test": "cucumber-js",
+    "demo": "cucumber-js --tags @demo",
+    "demo:1": "cucumber-js --tags @demo:1",
+    "demo:2": "cucumber-js --tags @demo:2",
+    "demo:3": "cucumber-js --tags @demo:3",
+    "demo:4": "cucumber-js --tags @demo:4",
+    "demo:5": "cucumber-js --tags @demo:5"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^7.3.2",
+    "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
+    "@types/chai": "^4.3.0",
+    "@types/luxon": "^2.0.9",
+    "@types/node": "^16.11.25",
+    "axios": "^0.26.0",
+    "chai": "^4.3.6",
+    "dotenv": "^16.0.0",
+    "kafkajs": "^1.16.0",
+    "luxon": "^2.3.0",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5",
+    "winston": "^3.6.0"
+  },
+  "dependencies": {}
+}
