@@ -1,0 +1,18 @@
+# Dependencies.
+node_modules/
+
+# Versionning.
+.gitignore
+
+# Docker.
+Dockerfile
+.dockerignore
+
+# Lint.
+.editorconfig
+
+# Angular.
+.angular/cache
+
+# Documentation.
+README.md

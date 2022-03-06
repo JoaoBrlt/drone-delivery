@@ -1,0 +1,26 @@
+// Layout.
+.layout {
+  height: 100%;
+}
+
+// Sidenav.
+.sidenav {
+  width: 280px;
+
+  // Title.
+  .title {
+    background: inherit;
+  }
+}
+
+// Navbar.
+.navbar {
+  height: 4rem;
+  z-index: 999999;
+
+  // Title.
+  .title {
+    color: white;
+    text-decoration: none;
+  }
+}

@@ -1,0 +1,25 @@
+// Page.
+html, body {
+  height: 100%;
+}
+
+// Body.
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Blink animation.
+@keyframes blinkAnimation {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,49 @@
+<!-- Layout -->
+<mat-sidenav-container class="layout">
+
+  <!-- Sidenav -->
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'">
+
+    <!-- Menu -->
+    <div class="menu">
+      <!-- Title -->
+      <mat-toolbar class="title">Menu</mat-toolbar>
+
+      <!-- Navigation -->
+      <mat-nav-list class="navigation">
+        <a mat-list-item href="customers/deliveries/DE-254DA">Customer</a>
+        <a mat-list-item href="technicians/drones">Technician</a>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+
+  <!-- Container -->
+  <mat-sidenav-content class="container">
+    <!-- Navbar -->
+    <mat-toolbar class="navbar" color="primary">
+
+      <!-- Sidenav toggle -->
+      <button
+        class="toggle"
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+
+      <!-- Title -->
+      <a class="title" href="/">Drone delivery</a>
+    </mat-toolbar>
+
+    <!-- Content -->
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
