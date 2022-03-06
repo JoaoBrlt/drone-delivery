@@ -1,0 +1,876 @@
+{
+	"info": {
+		"_postman_id": "a470da1f-94bd-443d-aad4-8685ece3251f",
+		"name": "drone-delivery",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Services",
+			"item": [
+				{
+					"name": "Drone heartbeat",
+					"item": [
+						{
+							"name": "Send a ping - OK",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"droneId\": 1,\r\n    \"deliveryId\": \"DE-254DA\",\r\n    \"isCritical\": true,\r\n    \"status\": \"OK\",\r\n    \"latitude\": 44.18465,\r\n    \"longitude\": 1.15491,\r\n    \"altitude\": 100,\r\n    \"date\": \"2021-08-02T16:00:00.000Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{drone-heartbeat-url}}/drone-heartbeat/send",
+									"host": [
+										"{{drone-heartbeat-url}}"
+									],
+									"path": [
+										"drone-heartbeat",
+										"send"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send a ping - LOST",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"droneId\": 1,\r\n    \"deliveryId\": \"DE-254DA\",\r\n    \"isCritical\": true,\r\n    \"status\": \"LOST\",\r\n    \"latitude\": 44.18465,\r\n    \"longitude\": 1.15491,\r\n    \"altitude\": 100,\r\n    \"date\": \"2021-11-03T08:00:00.000Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{drone-heartbeat-url}}/drone-heartbeat/send",
+									"host": [
+										"{{drone-heartbeat-url}}"
+									],
+									"path": [
+										"drone-heartbeat",
+										"send"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send a ping - DYSFUNCTIONAL",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"droneId\": 1,\r\n    \"deliveryId\": \"DE-254DA\",\r\n    \"isCritical\": true,\r\n    \"status\": \"DYSFUNCTIONAL\",\r\n    \"latitude\": 44.18465,\r\n    \"longitude\": 1.15491,\r\n    \"altitude\": 100,\r\n    \"date\": \"2021-08-02T16:00:00.000Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{drone-heartbeat-url}}/drone-heartbeat/send",
+									"host": [
+										"{{drone-heartbeat-url}}"
+									],
+									"path": [
+										"drone-heartbeat",
+										"send"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send a ping - NO SIGNAL",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"droneId\": 1,\r\n    \"deliveryId\": \"DE-254DA\",\r\n    \"isCritical\": true,\r\n    \"status\": \"NO_SIGNAL\",\r\n    \"latitude\": 44.18465,\r\n    \"longitude\": 1.15491,\r\n    \"altitude\": 100,\r\n    \"date\": \"2021-08-02T16:00:00.000Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{drone-heartbeat-url}}/drone-heartbeat/send",
+									"host": [
+										"{{drone-heartbeat-url}}"
+									],
+									"path": [
+										"drone-heartbeat",
+										"send"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crash",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{drone-heartbeat-url}}/drone-heartbeat/crash",
+									"host": [
+										"{{drone-heartbeat-url}}"
+									],
+									"path": [
+										"drone-heartbeat",
+										"crash"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Health check",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"droneId\": 1,\r\n    \"deliveryId\": \"DE-254DA\",\r\n    \"isCritical\": true,\r\n    \"status\": \"OK\",\r\n    \"latitude\": 44.18465,\r\n    \"longitude\": 1.15491,\r\n    \"altitude\": 100,\r\n    \"date\": \"2021-08-02T16:00:00.000Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{drone-heartbeat-url}}/drone-heartbeat/health",
+									"host": [
+										"{{drone-heartbeat-url}}"
+									],
+									"path": [
+										"drone-heartbeat",
+										"health"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Drone registry",
+					"item": [
+						{
+							"name": "Set drone as ready",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{drone-registry-url}}/drone-registry/1/ready",
+									"host": [
+										"{{drone-registry-url}}"
+									],
+									"path": [
+										"drone-registry",
+										"1",
+										"ready"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Set drone as done",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{drone-registry-url}}/drone-registry/1/done",
+									"host": [
+										"{{drone-registry-url}}"
+									],
+									"path": [
+										"drone-registry",
+										"1",
+										"done"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tracking router",
+					"item": [
+						{
+							"name": "Get the last position of a drone",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{tracking-router-url}}/tracking-router/track/1",
+									"host": [
+										"{{tracking-router-url}}"
+									],
+									"path": [
+										"tracking-router",
+										"track",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Display all drones position",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{tracking-router-url}}/tracking-router/displayDrones",
+									"host": [
+										"{{tracking-router-url}}"
+									],
+									"path": [
+										"tracking-router",
+										"displayDrones"
+									]
+								},
+								"description": "Display all drones position"
+							},
+							"response": []
+						},
+						{
+							"name": "Get the route of a drone",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{tracking-router-url}}/tracking-router/route/1",
+									"host": [
+										"{{tracking-router-url}}"
+									],
+									"path": [
+										"tracking-router",
+										"route",
+										"1"
+									]
+								},
+								"description": "Get the route of a drone"
+							},
+							"response": []
+						},
+						{
+							"name": "Get the progression of a delivery",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{tracking-router-url}}/tracking-router/delivery/delivery1",
+									"host": [
+										"{{tracking-router-url}}"
+									],
+									"path": [
+										"tracking-router",
+										"delivery",
+										"delivery1"
+									]
+								},
+								"description": "Get the progression of a delivery"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Alert handler",
+					"item": [
+						{
+							"name": "Test kafka",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{alert-handler-url}}/alert/kafka",
+									"host": [
+										"{{alert-handler-url}}"
+									],
+									"path": [
+										"alert",
+										"kafka"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send an alert - LOST",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"droneId\": 1,\r\n    \"deliveryId\": \"DE-442TE\",\r\n    \"currentPoint\":{\r\n        \"latitude\": 99,\r\n        \"longitude\": -88,\r\n        \"altitude\": 77.77\r\n    },\r\n    \"destinationText\": \"Toulouse\",\r\n    \"destinationPoint\":{\r\n        \"latitude\": -11.11,\r\n        \"longitude\": 22.2,\r\n        \"altitude\": 3.3\r\n    },\r\n    \"status\": \"LOST\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{alert-handler-url}}/alert",
+									"host": [
+										"{{alert-handler-url}}"
+									],
+									"path": [
+										"alert"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send an alert - FAILURE",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"droneId\": 1,\r\n    \"deliveryId\": \"DE-442TE\",\r\n    \"currentPoint\":{\r\n        \"latitude\": 99,\r\n        \"longitude\": -88,\r\n        \"altitude\": 77.77\r\n    },\r\n    \"destinationText\": \"Toulouse\",\r\n    \"destinationPoint\":{\r\n        \"latitude\": -11.11,\r\n        \"longitude\": 22.2,\r\n        \"altitude\": 3.3\r\n    },\r\n    \"status\": \"FAILURE\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{alert-handler-url}}/alert",
+									"host": [
+										"{{alert-handler-url}}"
+									],
+									"path": [
+										"alert"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send an alert - NO SIGNAL",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"droneId\": 1,\r\n    \"deliveryId\": \"DE-442TE\",\r\n    \"currentPoint\":{\r\n        \"latitude\": 99,\r\n        \"longitude\": -88,\r\n        \"altitude\": 77.77\r\n    },\r\n    \"destinationText\": \"Toulouse\",\r\n    \"destinationPoint\":{\r\n        \"latitude\": -11.11,\r\n        \"longitude\": 22.2,\r\n        \"altitude\": 3.3\r\n    },\r\n    \"status\": \"NO_SIGNAL\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{alert-handler-url}}/alert",
+									"host": [
+										"{{alert-handler-url}}"
+									],
+									"path": [
+										"alert"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Drone controller",
+					"item": [
+						{
+							"name": "Get Attribution",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{drone-controller-url}}/drone-controller/attribution/1",
+									"host": [
+										"{{drone-controller-url}}"
+									],
+									"path": [
+										"drone-controller",
+										"attribution",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Attribute",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"droneId\": 1,\r\n    \"deliveryId\": \"DE-7KC7J\",\r\n    \"destination\": \"Nice\",\r\n    \"path\": [\r\n        {\r\n            \"latitude\": 12,\r\n            \"longitude\": 5.64,\r\n            \"altitude\": 2.967\r\n        },\r\n        {\r\n            \"latitude\": 6.3,\r\n            \"longitude\": 5.186,\r\n            \"altitude\": 3.1703\r\n        },\r\n        {\r\n            \"latitude\": 0.6,\r\n            \"longitude\": 4.732,\r\n            \"altitude\": 3.3736\r\n        },\r\n        {\r\n            \"latitude\": -5.1,\r\n            \"longitude\": 4.278,\r\n            \"altitude\": 3.5769\r\n        },\r\n        {\r\n            \"latitude\": -10.8,\r\n            \"longitude\": 3.824,\r\n            \"altitude\": 3.7802\r\n        },\r\n        {\r\n            \"latitude\": -16.5,\r\n            \"longitude\": 3.37,\r\n            \"altitude\": 3.9835\r\n        },\r\n        {\r\n            \"latitude\": -22.2,\r\n            \"longitude\": 2.916,\r\n            \"altitude\": 4.1868\r\n        },\r\n        {\r\n            \"latitude\": -27.9,\r\n            \"longitude\": 2.462,\r\n            \"altitude\": 4.3901\r\n        },\r\n        {\r\n            \"latitude\": -33.6,\r\n            \"longitude\": 2.008,\r\n            \"altitude\": 4.5934\r\n        },\r\n        {\r\n            \"latitude\": -39.3,\r\n            \"longitude\": 1.554,\r\n            \"altitude\": 4.7967\r\n        }\r\n    ],\r\n    \"date\": \"2021-11-03T13:21:13.620Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{drone-controller-url}}/drone-controller/attribute",
+									"host": [
+										"{{drone-controller-url}}"
+									],
+									"path": [
+										"drone-controller",
+										"attribute"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delivery scheduler",
+					"item": [
+						{
+							"name": "Test kafka",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{delivery-scheduler-url}}/scheduler/kafka",
+									"host": [
+										"{{delivery-scheduler-url}}"
+									],
+									"path": [
+										"scheduler",
+										"kafka"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add a drone assignment",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"droneId\": 1,\n    \"deliveryId\": \"DE-X9NCQ\",\n    \"date\": \"2021-10-01T08:00:00Z\",\n    \"destination\": \"5 rue de l'Hôtel-de-Ville, Nice\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{delivery-scheduler-url}}/scheduler/create",
+									"host": [
+										"{{delivery-scheduler-url}}"
+									],
+									"path": [
+										"scheduler",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the latest drone assignment",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{delivery-scheduler-url}}/scheduler/get-latest",
+									"host": [
+										"{{delivery-scheduler-url}}"
+									],
+									"path": [
+										"scheduler",
+										"get-latest"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the next drone assignment",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{delivery-scheduler-url}}/scheduler/next?droneId=1",
+									"host": [
+										"{{delivery-scheduler-url}}"
+									],
+									"path": [
+										"scheduler",
+										"next"
+									],
+									"query": [
+										{
+											"key": "droneId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the next drone assignment - WITH Date",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{delivery-scheduler-url}}/scheduler/next?droneId=1&date=2021-10-01T12:00:00Z",
+									"host": [
+										"{{delivery-scheduler-url}}"
+									],
+									"path": [
+										"scheduler",
+										"next"
+									],
+									"query": [
+										{
+											"key": "droneId",
+											"value": "1"
+										},
+										{
+											"key": "date",
+											"value": "2021-10-01T12:00:00Z"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Load the fixtures",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{delivery-scheduler-url}}/scheduler/fixtures",
+									"host": [
+										"{{delivery-scheduler-url}}"
+									],
+									"path": [
+										"scheduler",
+										"fixtures"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Clear the entities",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{delivery-scheduler-url}}/scheduler/clear",
+									"host": [
+										"{{delivery-scheduler-url}}"
+									],
+									"path": [
+										"scheduler",
+										"clear"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "External",
+			"item": [
+				{
+					"name": "Air traffic authority",
+					"item": [
+						{
+							"name": "Get all urban areas",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{air-traffic-authority-url}}/air-traffic-authority",
+									"host": [
+										"{{air-traffic-authority-url}}"
+									],
+									"path": [
+										"air-traffic-authority"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find urban area (Nice)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{air-traffic-authority-url}}/air-traffic-authority/by-coordinates?latitude=43.70325&longitude=7.26831",
+									"host": [
+										"{{air-traffic-authority-url}}"
+									],
+									"path": [
+										"air-traffic-authority",
+										"by-coordinates"
+									],
+									"query": [
+										{
+											"key": "latitude",
+											"value": "43.70325"
+										},
+										{
+											"key": "longitude",
+											"value": "7.26831"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find urban area (Paris)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{air-traffic-authority-url}}/air-traffic-authority/by-coordinates?latitude=48.85793&longitude=2.25219",
+									"host": [
+										"{{air-traffic-authority-url}}"
+									],
+									"path": [
+										"air-traffic-authority",
+										"by-coordinates"
+									],
+									"query": [
+										{
+											"key": "latitude",
+											"value": "48.85793"
+										},
+										{
+											"key": "longitude",
+											"value": "2.25219"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find urban area (Not found)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{air-traffic-authority-url}}/air-traffic-authority/by-coordinates?latitude=45.70325&longitude=7.26831",
+									"host": [
+										"{{air-traffic-authority-url}}"
+									],
+									"path": [
+										"air-traffic-authority",
+										"by-coordinates"
+									],
+									"query": [
+										{
+											"key": "latitude",
+											"value": "45.70325"
+										},
+										{
+											"key": "longitude",
+											"value": "7.26831"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Local air traffic authority",
+					"item": [
+						{
+							"name": "Report air traffic (Nice)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"owner\": \"Drone Delivery (TM)\",\n    \"type\": \"DRONE\",\n    \"identifier\": \"DE-254DA\",\n    \"coordinates\": {\n        \"latitude\": 43.70325,\n        \"longitude\": 7.26831,\n        \"altitude\": 168\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local-air-traffic-authority-1-url}}/local-air-traffic-authority",
+									"host": [
+										"{{local-air-traffic-authority-1-url}}"
+									],
+									"path": [
+										"local-air-traffic-authority"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Report air traffic (Paris)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"owner\": \"Drone Delivery (TM)\",\n    \"type\": \"DRONE\",\n    \"identifier\": \"DE-254DA\",\n    \"coordinates\": {\n        \"latitude\": 48.85793,\n        \"longitude\": 2.25219,\n        \"altitude\": 245\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local-air-traffic-authority-2-url}}/local-air-traffic-authority",
+									"host": [
+										"{{local-air-traffic-authority-2-url}}"
+									],
+									"path": [
+										"local-air-traffic-authority"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Network coverage API",
+					"item": [
+						{
+							"name": "Get all network coverage areas",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"latitude\": 43.69145,\r\n    \"longitude\": 7.21303\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{network-coverage-api-url}}/network-coverage",
+									"host": [
+										"{{network-coverage-api-url}}"
+									],
+									"path": [
+										"network-coverage"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check network coverage (Nice)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{network-coverage-api-url}}/network-coverage/by-coordinates?latitude=43.69145&longitude=7.21303",
+									"host": [
+										"{{network-coverage-api-url}}"
+									],
+									"path": [
+										"network-coverage",
+										"by-coordinates"
+									],
+									"query": [
+										{
+											"key": "latitude",
+											"value": "43.69145"
+										},
+										{
+											"key": "longitude",
+											"value": "7.21303"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check network coverage (Paris)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{network-coverage-api-url}}/network-coverage/by-coordinates?latitude=48.85793&longitude=2.25219",
+									"host": [
+										"{{network-coverage-api-url}}"
+									],
+									"path": [
+										"network-coverage",
+										"by-coordinates"
+									],
+									"query": [
+										{
+											"key": "latitude",
+											"value": "48.85793"
+										},
+										{
+											"key": "longitude",
+											"value": "2.25219"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
